@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Styling the table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #e6ffe6; /* Light green background for the table */
+        }
+
+        th, td {
+            border: 1px solid #99cc99; /* Green border for cells */
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #66cc66; /* Darker green for header */
+            color: white; /* White text for header */
+        }
+
+        tr:nth-child(even) {
+            background-color: #ccffcc; /* Alternating light green for even rows */
+        }
+
+        tr:hover {
+            background-color: #b3ffb3; /* Highlight row on hover */
+        }
+
+        /* Styling the back button */
+        .back-button {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #66cc66; /* Green button background */
+            color: white; /* White text */
+            text-decoration: none; /* Remove underline */
+            border-radius: 5px; /* Rounded corners */
+            border: none; /* No border */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        .back-button:hover {
+            background-color: #55aa55; /* Darker green on hover */
+        }
+
+        /* Styling the dropdowns */
+        .filter-container {
+            margin: 20px 0;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #99cc99;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="back-button">Back</a>
+
+    <h2>Income Overview</h2>
+    <p style="text-align: right; font-weight: bold; font-family: 'Arial', sans-serif; font-size: 24px;">{{ u.Name }}</p>
+    
+
+    <!-- Filter dropdowns -->
+    <div class="filter-container">
+        <label for="monthFilter">Month:</label>
+        <select id="monthFilter" onchange="filterTable()">
+            <option value="">All Months</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+
+        <label for="yearFilter">Year:</label>
+        <select id="yearFilter" onchange="filterTable()">
+            <option value="">All Years</option>
+            <!-- Years will be populated dynamically via JS -->
+        </select>
+    </div>
+
+    <table id="incomeTable">
+        <thead>
+            <tr>
+                <th>Incomesource</th>
+                <th>Income</th>
+                <th>Totalincome</th>
+                <th>Balance</th>
+                <th>Date</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in income %}
+            <tr>
+                <td>{{ i.incomesource }}</td>
+                <td>{{ i.income }}</td>
+                <td>{{ i.totalincome }}</td>
+                <td>{{ i.balance }}</td>
+                <td>{{ i.date }}</td>
+                <td><a href="/edit_income/{{ i.id }}">Edit</a></td>
+                <td><a href="/deleteincome/{{ i.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        // Populate the year dropdown dynamically
+        function populateYears() {
+            const yearSelect = document.getElementById('yearFilter');
+            const currentYear = new Date().getFullYear();
+            const startYear = 2000; // Adjust as needed
+
+            for (let year = currentYear; year >= startYear; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.text = year;
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // Filter table rows based on selected month and year
+        function filterTable() {
+            const monthFilter = document.getElementById('monthFilter').value;
+            const yearFilter = document.getElementById('yearFilter').value;
+            const table = document.getElementById('incomeTable');
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const dateCell = row.cells[4].textContent; // Date column (index 4)
+                const date = new Date(dateCell); // Assuming date is in ISO format (e.g., 2025-03-15)
+
+                const rowMonth = date.getMonth() + 1; // getMonth() returns 0-11, so +1 to match 1-12
+                const rowYear = date.getFullYear();
+
+                // Show/hide rows based on filters
+                let showRow = true;
+                if (monthFilter && monthFilter !== rowMonth.toString()) {
+                    showRow = false;
+                }
+                if (yearFilter && yearFilter !== rowYear.toString()) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            }
+        }
+
+        // Initialize the year dropdown and filter on page load
+        window.onload = function() {
+            populateYears();
+            filterTable(); // Optional: Filters table if default values are set
+        };
+    </script>
+</body>
+</html>

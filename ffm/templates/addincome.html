@@ -1,0 +1,247 @@
+{% comment %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Details Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f8f8;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        /* Green styling for inputs and button */
+        input, select {
+            border-color: #4CAF50; /* Green border color */
+        }
+        button {
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+        .back-button {
+            background-color: #f1f1f1; /* Light gray background for back button */
+            color: #333;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .back-button:hover {
+            background-color: #ddd; /* Darker gray on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Enter Your Income Details</h1>
+    <div class="form-container">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="income">Income Amount</label>
+                <input type="number" id="income" name="income" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="income-source">Income Source</label>
+                <select id="income-source" name="incomesource" required>
+                    <option value="salary">Salary</option>
+                    <option value="business">Business</option>
+                    <option value="freelance">Freelance</option>
+                    <option value="investment">Investment</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+            <button type="button" class="back-button" onclick="window.history.back();">Back</button> <!-- Back button -->
+        </form>
+    </div>
+
+    <script>
+        // Set the max date to today's date dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            var today = new Date().toISOString().split('T')[0]; // Get today's date in yyyy-mm-dd format
+            document.getElementById('date').setAttribute('max', today);
+        });
+    </script>
+</body>
+</html> {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Details Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f8f8;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        /* Green styling for inputs and button */
+        input, select {
+            border-color: #4CAF50; /* Green border color */
+        }
+        button {
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+        .back-button {
+            background-color: #f1f1f1; /* Light gray background for back button */
+            color: #333;
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .back-button:hover {
+            background-color: #ddd; /* Darker gray on hover */
+        }
+        #other-income-source {
+            display: none; /* Hide the text input initially */
+        }
+    </style>
+</head>
+<body>
+    <h1>Enter Your Income Details</h1>
+    <div class="form-container">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="income">Income Amount</label>
+                <input type="number" id="income" name="income" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="income-source">Income Source</label>
+                <select id="income-source" name="incomesource" required>
+                    <option value="salary">Salary</option>
+                    <option value="business">Business</option>
+                    <option value="freelance">Freelance</option>
+                    <option value="investment">Investment</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <!-- Text input for "Other" income source -->
+            <div class="form-group" id="other-income-source">
+                <label for="other-source">Please specify</label>
+                <input type="text" id="other-source" name="other-source" placeholder="Enter your income source" />
+            </div>
+
+            <button type="submit">Submit</button>
+            <button type="button" class="back-button" onclick="window.history.back();">Back</button> <!-- Back button -->
+        </form>
+    </div>
+
+    <script>
+        // Show the "other-income-source" input only when "Other" is selected
+        document.getElementById('income-source').addEventListener('change', function() {
+            var otherIncomeSourceInput = document.getElementById('other-income-source');
+            if (this.value === 'other') {
+                otherIncomeSourceInput.style.display = 'block';
+            } else {
+                otherIncomeSourceInput.style.display = 'none';
+            }
+        });
+
+        // Trigger change event on page load to handle any pre-selected "other" option
+        window.onload = function() {
+            var selectBox = document.getElementById('income-source');
+            if (selectBox.value === 'other') {
+                document.getElementById('other-income-source').style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>

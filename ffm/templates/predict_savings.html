@@ -1,0 +1,129 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Goal and Predict Savings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <div class="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-8">
+        <h1 class="text-3xl font-bold text-center mb-6 text-green-600">Set Your Goal and Predict Savings</h1>
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label for="goal_name" class="block text-lg font-medium text-gray-700">Goal Name:</label>
+                <input type="text" id="goal_name" name="goal_name" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <div>
+                <label for="target_amount" class="block text-lg font-medium text-gray-700">Target Amount:</label>
+                <input type="text" id="target_amount" name="target_amount" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <div>
+                <label for="start_date" class="block text-lg font-medium text-gray-700">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+            </div>
+
+            <div>
+                <label for="selected_categories" class="block text-lg font-medium text-gray-700">Excluded Categories (comma-separated):</label>
+                <input type="text" id="selected_categories" name="selected_categories" placeholder="Food, Entertainment, Transport" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <button type="submit" class="w-full p-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">Save Goal</button><br><br><br>
+        </form>
+
+        {% if goal %}
+        <div class="mt-8 bg-gray-50 p-6 rounded-lg shadow-inner">
+            <h2 class="text-2xl font-semibold text-green-600">{{ goal.name }}</h2>
+            <p class="mt-2"><strong class="text-lg">Target Amount:</strong> ₹ {{ goal.target_amount }}</p>
+            <p><strong class="text-lg">Current Savings:</strong> ₹ {{ goal.current_savings }}</p>
+            <p><strong class="text-lg">Remaining Amount to Save:</strong> ₹ {{ remaining_to_save }}</p>
+
+            <h3 class="mt-6 text-xl font-semibold text-gray-800">Expense Prediction</h3>
+            <p><strong class="text-lg">Total Expenses (Last 3 months):</strong> ₹ {{ total_expenses }}</p>
+            <p><strong class="text-lg">Average Monthly Expense:</strong> ₹ {{ avg_monthly_expense }}</p>
+            <p><strong class="text-lg">Suggested Monthly Savings:</strong> ₹ {{ predicted_savings }}</p>
+        </div>
+        {% endif %}
+        <div class="w-full text-center p-t-55">
+            <a href="/viewgoals/" class="btn btn-primary w-full p-3 bg-green-600 text-white font-bold rounded-lg">View My Goals</a><br><br><br>
+        
+            <a href="/home/" class="back-button">Back to Home</a>
+        </div>
+    </div>
+
+
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Goal and Predict Savings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <div class="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-8">
+        <h1 class="text-3xl font-bold text-center mb-6 text-green-600">Set Your Goal and Predict Savings</h1>
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label for="goal_name" class="block text-lg font-medium text-gray-700">Goal Name:</label>
+                <input type="text" id="goal_name" name="goal_name" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <div>
+                <label for="target_amount" class="block text-lg font-medium text-gray-700">Target Amount:</label>
+                <input type="text" id="target_amount" name="target_amount" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <div>
+                <label for="start_date" class="block text-lg font-medium text-gray-700">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <div>
+                <label for="end_date" class="block text-lg font-medium text-gray-700">End Date:</label>
+                <input type="date" id="end_date" name="end_date" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <div>
+                <label for="selected_categories" class="block text-lg font-medium text-gray-700">Excluded Categories (comma-separated):</label>
+                <input type="text" id="selected_categories" name="selected_categories" placeholder="Food, Entertainment, Transport" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <button type="submit" class="w-full p-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">Save Goal</button><br><br><br>
+        </form>
+
+        {% if goal %}
+        <div class="mt-8 bg-gray-50 p-6 rounded-lg shadow-inner">
+            <h2 class="text-2xl font-semibold text-green-600">{{ goal.name }}</h2>
+            <p class="mt-2"><strong class="text-lg">Target Amount:</strong> ₹ {{ goal.target_amount }}</p>
+            <!-- <p><strong class="text-lg">Current Savings:</strong> ₹ {{ goal.current_savings }}</p>
+            <p><strong class="text-lg">Remaining Amount to Save:</strong> ₹ {{ remaining_to_save }}</p> -->
+            <p><strong class="text-lg">Start Date:</strong> {{ goal.start_date }}</p>
+            <p><strong class="text-lg">End Date:</strong> {{ goal.end_date }}</p>
+
+            <h3 class="mt-6 text-xl font-semibold text-gray-800">Expense Prediction</h3>
+            <!-- <p><strong class="text-lg">Total Expenses (Last 3 months):</strong> ₹ {{ total_expenses }}</p>
+            <p><strong class="text-lg">Average Monthly Expense:</strong> ₹ {{ avg_monthly_expense }}</p> -->
+            <p><strong class="text-lg">Months to Goal:</strong> {{ months_to_goal }}</p>
+            <p><strong class="text-lg">Suggested Monthly Savings:</strong> ₹ {{ suggested_monthly_savings }}</p>
+            <!-- <p><strong class="text-lg">Predicted Total Savings by End Date:</strong> ₹ {{ predicted_total_savings }}</p> -->
+        </div>
+        {% endif %}
+        <div class="w-full text-center p-t-55">
+            <a href="/viewgoals/" class="btn btn-primary w-full p-3 bg-green-600 text-white font-bold rounded-lg">View My Goals</a><br><br><br>
+            <a href="/home/" class="back-button">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Form with Voice Recording</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans p-6">
+    <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-semibold text-center mb-6">Input Your Expenses with Voice</h1>
+        <form id="expenseForm" method="POST" action="{% url 'submit_expense_form' %}">
+            {% csrf_token %}
+            
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+                <input type="email" id="email" name="email" required class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your email">
+            </div>
+
+            <div class="mb-4">
+                <label for="date" class="block text-sm font-medium text-gray-700">Date:</label>
+                <input type="date" id="date" name="date" required class="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+
+            <!-- Voice Recording Section -->
+            <div class="mb-6">
+                <button type="button" id="startRecord" class="bg-blue-500 text-white py-2 px-4 rounded-lg mr-2 focus:outline-none hover:bg-blue-600">Start Recording</button>
+                <button type="button" id="stopRecord" class="bg-red-500 text-white py-2 px-4 rounded-lg focus:outline-none hover:bg-red-600 disabled:opacity-50" disabled>Stop Recording</button>
+                <p id="recordStatus" class="text-sm text-gray-600 mt-2">Press "Start Recording" to begin.</p>
+            </div>
+
+            <!-- Voice-to-Text Preview Section -->
+            <div class="mb-6" id="textPreviewContainer" style="display: none;">
+                <label class="block text-sm font-medium text-gray-700">Preview of your voice transcription:</label>
+                <p id="textPreview" class="mt-2 text-gray-600"></p>
+            </div>
+
+            <!-- Hidden Input for Recorded Audio -->
+            <input type="hidden" id="recordedAudio" name="recordedAudio">
+
+            <div class="flex justify-center">
+                <button type="submit" class="bg-green-500 text-white py-2 px-6 rounded-lg focus:outline-none hover:bg-green-600">Submit</button>
+            </div>
+            <a href="/home/" class="back-button">Back to Home</a>
+        </form>
+    </div>
+
+    <!-- Scripts for Voice Input and Recording -->
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+
+        const startRecordBtn = document.getElementById('startRecord');
+        const stopRecordBtn = document.getElementById('stopRecord');
+        const recordStatus = document.getElementById('recordStatus');
+        const textPreviewContainer = document.getElementById('textPreviewContainer');
+        const textPreview = document.getElementById('textPreview');
+        const recordedAudioInput = document.getElementById('recordedAudio');
+
+        startRecordBtn.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                    audioChunks = [];
+
+                    // Convert Blob to Base64
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = () => {
+                        recordedAudioInput.value = reader.result; // Attach Base64 audio to form
+                    };
+
+                    // Transcribe audio to text
+                    const formData = new FormData();
+                    formData.append("audio", blob);
+
+                    // Call your transcription endpoint here (you should integrate this with Django backend)
+                    const response = await fetch('/transcribe_audio/', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    if (data.transcription) {
+                        textPreview.textContent = data.transcription;
+                        textPreviewContainer.style.display = 'block';
+                        recordStatus.textContent = 'Recording stopped. Ready to submit!';
+                    } else {
+                        recordStatus.textContent = 'Error transcribing audio.';
+                    }
+                };
+
+                mediaRecorder.start();
+                recordStatus.textContent = 'Recording... Press "Stop Recording" to finish.';
+                startRecordBtn.disabled = true;
+                stopRecordBtn.disabled = false;
+            } catch (error) {
+                alert('Error accessing microphone: ' + error.message);
+            }
+        });
+
+        stopRecordBtn.addEventListener('click', () => {
+            mediaRecorder.stop();
+            startRecordBtn.disabled = false;
+            stopRecordBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>

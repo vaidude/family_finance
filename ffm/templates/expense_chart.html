@@ -1,0 +1,168 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white; /* White background */
+            color: #333; /* Dark text color */
+        }
+
+        header {
+            background-color: #4CAF50; /* Green header background */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #f9f9f9; /* Light grey background for the container */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #4CAF50; /* Green color for subtitles */
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Green footer background */
+            color: white;
+            margin-top: 20px;
+        }
+
+        .back-button {
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Your Expense Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <h2>Expense Distribution</h2>
+
+        <!-- Back Button -->
+        <a href="javascript:history.back()" class="back-button">Back</a>
+
+        <div class="chart-container">
+            {% for img in bar_chart_images %}
+            <img src="{{ img }}" alt="Expense Bar Chart" style="margin-bottom: 20px;">
+        {% endfor %}
+        
+        </div>
+        
+    </div>
+
+    
+</body>
+</html> {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: white; color: #333; }
+        header { background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; }
+        h1 { margin: 0; }
+        .container { padding: 20px; max-width: 900px; margin: 0 auto; background: #f9f9f9; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); border-radius: 8px; }
+        h2 { color: #4CAF50; margin-bottom: 20px; }
+        .chart-container { text-align: center; margin: 20px 0; }
+        .chart-container img { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        footer { text-align: center; padding: 10px 20px; background-color: #4CAF50; color: white; margin-top: 20px; }
+        .back-button { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; margin-bottom: 20px; }
+        .back-button:hover { background-color: #45a049; }
+        #monthSelector { padding: 8px; border-radius: 5px; border: 1px solid #ddd; font-size: 16px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Your Expense Dashboard</h1>
+    </header>
+    <div class="container">
+        <h2>Expense Distribution</h2>
+        <a href="javascript:history.back()" class="back-button">Back</a>
+        <select id="monthSelector">
+            <option value="">All Months</option>
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+        </select>
+        <div class="chart-container">
+            {% for img in bar_chart_images %}
+            <img src="{{ img }}" alt="Expense Bar Chart" data-month="" style="margin-bottom: 20px;">
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        const actualMonthOrder = ["February", "January", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const charts = document.querySelectorAll('.chart-container img');
+        charts.forEach((chart, index) => {
+            const monthName = actualMonthOrder[index] || "Unknown";
+            chart.setAttribute('data-month', monthName);
+            console.log(`Image ${index + 1}: ${monthName}`);
+        });
+        document.getElementById('monthSelector').addEventListener('change', function() {
+            const selectedMonth = this.value;
+            charts.forEach(chart => {
+                const chartMonth = chart.getAttribute('data-month');
+                chart.style.display = (selectedMonth === '') ? 'block' : (chartMonth === selectedMonth ? 'block' : 'none');
+            });
+        });
+    </script>
+</body>
+</html>

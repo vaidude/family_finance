@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Receipt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 py-10 flex justify-center items-center min-h-screen">
+
+    <div class="max-w-lg w-full bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-4 text-center">Upload & Scan Receipt</h2>
+
+        <!-- Upload Form -->
+        <form method="POST" enctype="multipart/form-data" class="mb-4">
+            {% csrf_token %}
+            <input type="file" name="receipt" class="block w-full p-2 border rounded-md">
+            <button type="submit" class="mt-2 px-4 py-2 bg-green-500 text-white rounded-md w-full">Scan Receipt</button>
+        </form>
+
+        {% if extracted_data %}
+        <!-- Display Extracted Data -->
+        <div class="mt-6 bg-gray-50 p-4 rounded-md shadow">
+            <h3 class="text-lg font-semibold">Extracted Data:</h3>
+            <p><strong>Category:</strong> {{ extracted_data.expensecategory }}</p>
+            <p><strong>Amount:</strong> {{ extracted_data.amount }}</p>
+            <p><strong>Date:</strong> {{ extracted_data.date }}</p>
+        </div>
+
+        <!-- Save Data Form -->
+        <form method="POST" class="mt-6">
+            {% csrf_token %}
+            <input type="hidden" name="expensecategory" value="{{ extracted_data.expensecategory }}">
+            <input type="hidden" name="amount" value="{{ extracted_data.amount }}">
+            <input type="hidden" name="date" value="{{ extracted_data.date }}">
+            <button type="submit" name="save_expense" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-md w-full">
+                Save Expense
+            </button>
+        </form>
+        {% endif %}
+        <a href="/home/" class="back-button">Back to Home</a>
+    </div>
+
+</body>
+</html>

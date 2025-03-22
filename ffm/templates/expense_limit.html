@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Limit Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        {% for status in category_status %}
+        <div class="mb-6 p-4 border rounded-lg shadow-md bg-gray-50">
+            <h1 class="text-xl font-bold text-gray-800 mb-2">
+                Expense Limits for {{ status.user.Name }}
+            </h1>
+            <div class="p-4 bg-white shadow rounded-md">
+                <p class="text-lg font-semibold text-gray-700">{{ status.category }}</p>
+                <p class="text-gray-600">Limit: <span class="font-semibold">₹{{ status.limit_amount }}</span></p>
+                <p class="text-gray-600">Total Expenses: <span class="font-semibold">₹{{ status.total_expense }}</span></p>
+                
+                {% if status.limit_exceeded %}
+                    <p class="text-red-600 font-bold">🚨 Limit Exceeded!</p>
+                {% else %}
+                    <p class="text-green-600 font-bold">✅ Within Limit</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'home' %}" class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600">
+                Back to Home
+            </a>
+        </div>
+    </div>

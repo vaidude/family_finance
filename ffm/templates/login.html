@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login V5</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="{% static 'log/images/icons/favicon.ico' %}"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'log/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'log/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'log/fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'log/vendor/animate/animate.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'log/vendor/css-hamburgers/hamburgers.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'log/vendor/animsition/css/animsition.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'log/vendor/select2/select2.min.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'log/vendor/daterangepicker/daterangepicker.css' %}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'log/css/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'log/css/main.css' %}">
+    <!--===============================================================================================-->
+
+    <!-- Custom Styles -->
+    <style>
+        .wrap-login100 {
+            background: #ffffff;
+            border: none; /* Remove border */
+            border-radius: 15px;
+            padding: 40px 30px; /* Adjust padding for smaller size */
+            width: 320px; /* Reduce width */
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1); /* Optional for subtle depth */
+            margin: auto; /* Center align */
+        }
+    
+        .container-login100 {
+            min-height: 100vh; /* Full height for centering */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.6) url('{% static "log/images/bg-01.jpg" %}') no-repeat center center;
+            background-size: cover;
+        }
+    
+        .login100-form-title {
+            font-size: 24px; /* Adjust title size */
+            margin-bottom: 15px;
+        }
+    
+        .login100-form-btn {
+            background: #007BFF;
+            color: #fff;
+            font-size: 14px; /* Adjust button font size */
+            padding: 8px 20px; /* Adjust button padding */
+            border-radius: 20px;
+        }
+    
+        .txt1 {
+            font-size: 13px; /* Adjust label size */
+        }
+    
+        .txt2 {
+            font-size: 12px; /* Adjust text size */
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100">
+                <form method="POST" class="login100-form validate-form flex-sb flex-w">
+                    {% csrf_token %}
+                    {% if msg %}
+                    <p style="color:red">{{ msg }}</p>
+                    {% endif %}
+                    <span class="login100-form-title">
+                        Sign In
+                    </span>
+
+                    <div class="p-t-31 p-b-9">
+                        <span class="txt1">Email</span>
+                    </div>
+                    <div class="wrap-input100 validate-input" data-validate="Email is required">
+                        <input class="input100" type="text" name="email" placeholder="Enter your email">
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div class="p-t-13 p-b-9">
+                        <span class="txt1">Password</span>
+                    </div>
+                    <div class="wrap-input100 validate-input" data-validate="Password is required" style="position: relative;">
+                        <input class="input100" type="password" id="password" name="password" placeholder="Enter your password">
+                        <span class="focus-input100"></span>
+                        <span class="toggle-password" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #999;">
+                            <i class="fa fa-eye" id="toggleIcon"></i>
+                        </span>
+                    </div>
+                    
+                    
+                    
+
+                    <div class="container-login100-form-btn m-t-17">
+                        <button type="submit" class="login100-form-btn">
+                            Sign In
+                        </button>
+                    </div>
+
+                    <div class="w-full text-center p-t-55">
+                        <span class="txt2">Not a member?</span>
+                        <a href="/register/" class="txt2 bo1">Sign up now</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="dropDownSelect1"></div>
+
+    <!--===============================================================================================-->
+    <script src="{% static 'log/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'log/vendor/animsition/js/animsition.min.js' %}"></script>
+    <script src="{% static 'log/vendor/bootstrap/js/popper.js' %}"></script>
+    <script src="{% static 'log/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'log/vendor/select2/select2.min.js' %}"></script>
+    <script src="{% static 'log/vendor/daterangepicker/moment.min.js' %}"></script>
+    <script src="{% static 'log/vendor/daterangepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'log/vendor/countdowntime/countdowntime.js' %}"></script>
+    <script src="{% static 'log/js/main.js' %}"></script>
+</body>
+<script>
+    document.querySelector('.toggle-password').addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    });
+</script>
+
+</html>

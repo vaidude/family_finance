@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Category Limit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 font-sans">
+    <div class="max-w-4xl mx-auto py-10">
+        <h1 class="text-3xl font-bold text-green-600 text-center mb-6">Set Expense Limit for Categories</h1>
+
+        {% if message %}
+        <div class="bg-green-100 text-green-700 p-4 rounded-lg mb-4">
+            {{ message }}
+        </div>
+        {% endif %}
+
+        <form method="post" class="bg-white shadow-md rounded-lg p-6">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="category" class="block text-lg font-medium text-green-700">Category</label>
+                <select id="category" name="category" class="w-full border border-green-300 rounded-lg px-4 py-2">
+                    {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="limit" class="block text-lg font-medium text-green-700">Limit Amount (₹ )</label>
+                <input type="text" id="limit" name="limit" class="w-full border border-green-300 rounded-lg px-4 py-2" required>
+            </div>
+
+            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700">
+                Set Limit
+            </button>
+            <a href="/home/" class="back-button">Back to Home</a>
+        </form>
+    </div>
+
+    <!-- ✨ Hidden Modal for Expense Details -->
+    <div id="expenseModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold text-green-800">Expense Limits</h2>
+            <ul class="mt-4">
+                {% for status in expense %}
+                <li class="border-b py-2">
+                    <strong>{{ status.expensecategory }}</strong><br>
+                    Limit: ₹ {{ status.limit_amount }}
+                    <form action="{% url 'delete_expense_limit' status.id %}" method="POST" class="mt-2">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600 w-full" 
+                            onclick="return confirm('Are you sure you want to delete this limit?');">
+                            Delete
+                        </button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            <button id="closeModal" class="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- ✨ JavaScript to Show Modal After 1.5 Seconds -->
+    <script>
+        window.addEventListener("load", function () {
+            setTimeout(function () {
+                document.getElementById("expenseModal").classList.remove("hidden");
+            }, 1500);
+        });
+
+        // Close Modal
+        document.getElementById("closeModal").addEventListener("click", function () {
+            document.getElementById("expenseModal").classList.add("hidden");
+        });
+    </script>
+</body>
+</html>

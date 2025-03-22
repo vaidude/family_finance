@@ -1,0 +1,242 @@
+ <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add Expense by Voice</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f0fff4; /* Light green background */
+                margin: 0;
+                padding: 20px;
+                color: #2e7d32; /* Dark green text */
+            }
+            h1 {
+                color: #1b5e20; /* Darker green */
+                text-align: center;
+            }
+            p {
+                text-align: center;
+            }
+            button {
+                background-color: #4CAF50; /* Green background */
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin: 10px;
+            }
+            button:hover {
+                background-color: #45a049; /* Darker green on hover */
+            }
+            .output-box {
+                margin-top: 20px;
+                padding: 20px;
+                background-color: #e8f5e9; /* Light green for output box */
+                border: 1px solid #c8e6c9; /* Lighter green border */
+                border-radius: 8px;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .input-field {
+                margin: 10px 0;
+            }
+            label {
+                font-weight: bold;
+                color: #2e7d32; /* Dark green */
+            }
+            input {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #4CAF50; /* Green border */
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+            input:focus {
+                outline: none;
+                border-color: #2e7d32; /* Darker green on focus */
+            }
+            #status-message {
+                margin-top: 10px;
+                font-weight: bold;
+                color: #1b5e20; /* Dark green */
+            }
+            .back-button {
+                background-color: #4CAF50; /* Green */
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                text-align: center;
+                display: block;
+                width: 100%;
+                max-width: 200px;
+                margin: 20px auto;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+            .back-button:hover {
+                background-color: #45a049; /* Darker green on hover */
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Add Expense Using Your Voice</h1>
+        <p>Click "Start Recording" and say your expense details (e.g., "200 food 2024 December 2").</p>
+
+        <div style="text-align: center;">
+            <button id="start-recording" onclick="startRecording()">Start Recording</button>
+            <button id="stop-recording" onclick="stopRecording()" disabled>Stop Recording</button>
+        </div>
+
+        <div class="output-box">
+            <h3>Recognized Details</h3>
+
+            <!-- Fields to display recognized data -->
+            <div class="input-field">
+                <label for="amount">Amount:</label>
+                <input type="text" id="amount" readonly>
+            </div>
+
+            <div class="input-field">
+                <label for="expensecategory">Expense Category:</label>
+                <input type="text" id="expensecategory" >
+            </div>
+
+            <div class="input-field">
+                <label for="date">Date (yyyy-mm-dd):</label>
+                <input type="text" id="date" readonly>
+            </div>
+
+            <button id="submit-expense" onclick="submitExpense()" disabled>Submit Expense</button>
+
+            <p id="status-message"></p>
+        </div>
+
+        <!-- Back to Home Button -->
+        <a href="/home/" class="back-button">Back to Home</a>
+
+        <script>
+            let recognition;
+            let recognizing = false;
+
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.onstart = function() {
+                    recognizing = true;
+                    document.getElementById('start-recording').disabled = true;
+                    document.getElementById('stop-recording').disabled = false;
+                };
+
+                recognition.onend = function() {
+                    recognizing = false;
+                    document.getElementById('start-recording').disabled = false;
+                    document.getElementById('stop-recording').disabled = true;
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    console.log('Recognized Text:', transcript); // Debugging output
+                    parseAndDisplayResult(transcript);
+                };
+
+                recognition.onerror = function(event) {
+                    alert('Error recognizing voice: ' + event.error);
+                };
+            } else {
+                alert('Your browser does not support speech recognition.');
+            }
+
+            function startRecording() {
+                recognition.start();
+            }
+
+            function stopRecording() {
+                recognition.stop();
+            }
+
+            function parseAndDisplayResult(text) {
+                console.log('Original Text:', text); // Debugging the original input
+
+                // Regex to match "amount category YYYY Month DD"
+                const regex = /^(\d+)\s+(\w+)\s+(\d{4})\s+([a-zA-Z]+)\s+(\d{1,2})$/;
+                const match = text.toLowerCase().match(regex);
+
+                if (match) {
+                    console.log('Regex Match:', match); // Debugging the regex match
+
+                    const amount = match[1];
+                    const category = match[2];
+                    const year = match[3];
+                    const month = match[4];
+                    const day = match[5];
+
+                    // Convert month name to number
+                    const monthIndex = new Date(`${month} 1, ${year}`).getMonth() + 1;
+                    const formattedDate = `${year}-${String(monthIndex).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                    // Fill the fields with the parsed data
+                    document.getElementById('amount').value = amount;
+                    document.getElementById('expensecategory').value = category;
+                    document.getElementById('date').value = formattedDate;
+
+                    // Enable submit button after valid data is parsed
+                    document.getElementById('submit-expense').disabled = false;
+                } else {
+                    console.log('Invalid format'); // Debugging when the format is invalid
+                    document.getElementById('status-message').textContent = 'Invalid format. Please say again in the correct format (e.g., "200 food 2024 December 2").';
+                }
+            }
+
+            function submitExpense() {
+                const amount = document.getElementById('amount').value.trim();
+                const category = document.getElementById('expensecategory').value.trim();
+                const date = document.getElementById('date').value.trim();
+
+                // Ensure all fields are filled
+                if (!amount || !category || !date) {
+                    document.getElementById('status-message').textContent = 'Please ensure all fields are filled.';
+                    return;
+                }
+
+                const [year, month, day] = date.split('-');
+                const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'long' });
+
+                const recognizedText = `${amount} ${category} ${year} ${monthName} ${parseInt(day)}`;
+
+                const requestData = {
+                    recognized_text: recognizedText
+                };
+
+                fetch('/add-expense-voice/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('status-message').textContent = data.message;
+                    if (data.status === 'success') {
+                        // Clear the fields after successful submission
+                        document.getElementById('amount').value = '';
+                        document.getElementById('expensecategory').value = '';
+                        document.getElementById('date').value = '';
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById('status-message').textContent = 'An error occurred while adding the expense.';
+                });
+            }
+        </script>
+    </body>
+    </html> 
+   

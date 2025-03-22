@@ -1,0 +1,104 @@
+{% extends 'adminhome.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 5px;
+            background-color: #f9f9f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #EB1616;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .button {
+            padding: 8px 12px;
+            margin-right: 5px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h2 align="">User List</h2>
+<input type="text" id="searchBar" placeholder="Search by username or email..." onkeyup="filterUsers()"><br><br><br>
+
+<table id="userTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Image</th>
+            <!-- <th>Date Joined</th> -->
+            <th>Actions</th>
+        </tr>
+    </thead>
+    {% for i in user %}
+    <tbody>
+        <tr>
+            <td>{{i.Name}}</td>
+            <td>{{i.username}}</td>
+            <td>{{i.phone}}</td>
+            <td>{{i.email}}</td>
+            <td><img src="/media/{{i.image}}"style="width:100px; height:100px"></td>
+            <!--  -->
+                <!-- <button class="button">Edit</button> -->
+
+            <td><button class="button"><a href="/user_delete/{{i.id}}/">Delete</button></a></td>
+            </td>
+        </tr>  
+    </tbody>
+    {% endfor %}
+</table>
+
+<!-- <script>
+    function filterUsers() {
+        const input = document.getElementById('searchBar');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('userTable');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 1; j < cells.length - 1; j++) { // Exclude Actions column
+                if (cells[j].textContent.toLowerCase().includes(filter)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            rows[i].style.display = found ? '' : 'none';
+        }
+    }
+</script> -->
+
+</body>
+</html>
+
+{% endblock %}

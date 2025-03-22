@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Income and Expense Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <div class="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-8">
+        <h1 class="text-3xl font-bold text-center mb-6 text-green-600">Export Income and Expense Report</h1>
+
+        {% if error %}
+            <div class="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label for="month" class="block text-lg font-medium text-gray-700">Month:</label>
+                <select name="month" id="month" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+                    <option value="">Select Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="year" class="block text-lg font-medium text-gray-700">Year:</label>
+                <input type="number" name="year" id="year" value="{{ current_year }}" min="2000" max="2100" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+            </div>
+
+            <div>
+                <label for="type" class="block text-lg font-medium text-gray-700">Format:</label>
+                <select name="type" id="type" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" required>
+                    <option value="excel">Excel</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </div>
+
+            <button type="submit" class="w-full p-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">Generate Report</button>
+        </form>
+
+        <div class="mt-6 text-center">
+            <a href="/home/" class="text-green-600 hover:underline">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

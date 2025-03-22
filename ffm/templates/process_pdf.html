@@ -1,0 +1,124 @@
+<!-- process_pdf.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload PDF Bill</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .btn-primary {
+            background-color: #37a106;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #71da16;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        .alert {
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        .details {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f1f3f5;
+            border-radius: 8px;
+        }
+        .details table {
+            margin-bottom: 0;
+        }
+        .form-control:focus {
+            border-color: #37a106;
+            box-shadow: 0 0 0 0.2rem rgba(55, 161, 6, 0.25);
+        }
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #37a106;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            color: #71da16;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload PDF Bill</h1>
+        
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="pdf" class="form-label fw-bold">Select PDF Receipt</label>
+                <input type="file" name="pdf" id="pdf" class="form-control" accept="application/pdf" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Upload and Process</button>
+        </form>
+
+        <div class="mt-3">
+            <a href="/scan/" class="back-button">Scan Receipt Instead</a>
+            <a href="/home/" class="back-button">Back to Home</a>
+        </div>
+
+        {% if extracted_data.status != "pending" %}
+        <div class="details">
+            <h3>Extracted Details</h3>
+            <table class="table table-borderless">
+                <tr>
+                    <th>Date:</th>
+                    <td>{{ extracted_data.date|date:"M d, Y" }}</td>
+                </tr>
+                <tr>
+                    <th>Category:</th>
+                    <td>{{ extracted_data.category }}</td>
+                </tr>
+                <tr>
+                    <th>Amount:</th>
+                    <td>₹{{ extracted_data.amount|floatformat:2 }}</td>
+                </tr>
+            </table>
+            {% if extracted_data.status == "review" %}
+            <p class="text-warning mt-2 mb-0">Please verify these details before saving.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

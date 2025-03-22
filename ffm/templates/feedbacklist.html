@@ -1,0 +1,117 @@
+{% extends "adminhome.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212; /* Dark black background */
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e63946; /* Bright red color for the title */
+        }
+
+        .table-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #1e1e1e; /* Dark grey background for the table */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #444; /* Subtle border for row separation */
+        }
+
+        th {
+            background-color: #e63946; /* Bright red for header background */
+            color: white;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2c2c2c; /* Slightly lighter grey for alternate rows */
+        }
+
+        tr:hover {
+            background-color: #3a3a3a; /* Highlight row on hover */
+        }
+
+        td {
+            color: white; /* White text for table content */
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #e63946; /* Bright red for button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            background-color: #c5303e; /* Slightly darker red on hover */
+            text-decoration: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            th, td {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .back-btn {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Feedback Table</h1>
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Email</th>
+                <th>Feedback Text</th>
+                <th>Rating</th>
+                <th>Created At</th>
+                <th>Delete</th>
+            </tr>
+            {% for i in f %}
+            <tr>
+                <td>{{ i.email }}</td>
+                <td>{{ i.feedback_text }}</td>
+                <td>{{ i.rating }}</td>
+                <td>{{ i.created_at }}</td>
+                <td><a href="/deletefeedback/{{ i.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
+</body>
+</html>
+{% endblock %}

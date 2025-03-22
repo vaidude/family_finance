@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Edit</title>
+    <style>
+        body {
+            background-color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .padding {
+            padding: 3rem !important;
+        }
+
+        .user-card-full {
+            display: flex;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 5px;
+            box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+        }
+
+        .user-profile {
+            flex: 1;
+            background: linear-gradient(to right, #ee5a6f, #f29263);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-block {
+            flex: 2;
+            padding: 20px;
+            background: white;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-link li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .back-button:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" id="signup-form" class="signup-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="page-content page-container" id="page-content">
+            <div class="padding">
+                <div class="user-card-full">
+                    <div class="user-profile">
+                        <h1>PROFILE</h1>
+                        {% if edt %}
+                        {% if edt.image %}
+                        <img src="{{edt.image.url}}" style="height: 150px; width: 150px;" class="img-radius" alt="User-Profile-Image">
+                        {% else %}
+                        <p>No image found</p>
+                        {% endif %}
+                        <input type="file" name="image" />
+                        {% endif %}
+                    </div>
+                    <div class="card-block">
+                        <!-- Back Button -->
+                        <a href="javascript:history.back()" class="back-button">Back</a>
+
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-input" name="name" id="name" placeholder="Your Name" value="{{edt.Name}}"/>
+                        </div>
+                        <div class="form-group">
+                            <br><label>Username</label>
+                            <input type="text" class="form-input" name="username" id="username" placeholder="Username" value="{{edt.username}}"/>
+                        </div>
+                        <div class="form-group">
+                            <br><label>Phone No.</label>
+                            <input type="tel" class="form-input" name="phone" id="phone" placeholder="Phone No." value="{{edt.phone}}"/>
+                        </div>
+                        <div class="form-group">
+                            <br><label>Email</label>
+                            <input type="email" class="form-input" name="email" id="email" placeholder="Your Email" value="{{edt.email}}" readonly/>
+                        </div>
+                        <div class="button-container">
+                            <br><button type="submit">Save</button>
+                        </div>
+                        <ul class="social-link list-unstyled m-t-40 m-b-10">
+                            <li><a href="#!"><i class="mdi mdi-facebook" aria-hidden="true"></i></a></li>
+                            <li><a href="#!"><i class="mdi mdi-twitter" aria-hidden="true"></i></a></li>
+                            <li><a href="#!"><i class="mdi mdi-instagram" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

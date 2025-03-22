@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            background-color: #f5f8f8;
+            font-family: Arial, sans-serif;
+        }
+        .padding {
+            padding: 3rem !important;
+        }
+        .user-card-full {
+            display: flex;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 5px;
+            box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+        }
+        .user-profile {
+            flex: 1;
+            background: linear-gradient(to right, #70cb79, #09c055);
+            padding: 20px;
+            text-align: center;
+            color: rgb(14, 14, 14);
+        }
+        .card-block {
+            flex: 2;
+            padding: 20px;
+            background: white;
+        }
+        .img-radius {
+            border-radius: 5px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container .back-button {
+            display: inline-block;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .button-container .back-button:hover {
+            background-color: #5a6268;
+        }
+        .social-link li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" id="signup-form" class="signup-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="page-content page-container" id="page-content">
+            <div class="padding">
+                <div class="user-card-full">
+                    <div class="user-profile">
+                        <h1>PROFILE</h1>
+                        {% if usr %}
+                        {% if usr.image %}
+                        <img src="{{usr.image.url}}" style="height: 150px; width: 150px;" class="img-radius" alt="User-Profile-Image">
+                        {% else %}
+                        <p>No image found</p>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="card-block">
+                        <!-- Back to Home Button -->
+                        <div class="button-container">
+                            <a href="/home/" class="back-button">Back to Home</a>
+                        </div>
+
+                        <div>
+                            <p>Name</p>
+                            <input type="text" class="form-input" name="name" id="name" value="{{usr.Name}}" readonly/>
+                        </div>
+                        <div>
+                            <p>Username</p>
+                            <input type="text" class="form-input" name="username" id="username" value="{{usr.username}}" readonly/>
+                        </div>
+                        <div>
+                            <p>Phone</p>
+                            <input type="tel" class="form-input" name="phone" id="phone" value="{{usr.phone}}" readonly/>
+                        </div>
+                        <div>
+                            <p>Email</p>
+                            <input type="email" class="form-input" name="email" id="email" value="{{usr.email}}" readonly/>
+                        </div>
+                        <div class="button-container">
+                            <button><a href="/edit/{{usr.id}}/">Edit</a></button>
+                        </div>
+                        <ul class="social-link list-unstyled m-t-40 m-b-10">
+                            <li><a href="#!" title="facebook"><i class="mdi mdi-facebook" aria-hidden="true"></i></a></li>
+                            <li><a href="#!" title="twitter"><i class="mdi mdi-twitter" aria-hidden="true"></i></a></li>
+                            <li><a href="#!" title="instagram"><i class="mdi mdi-instagram" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

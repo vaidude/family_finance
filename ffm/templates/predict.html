@@ -1,0 +1,132 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Expense Predictions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-inter text-gray-800">
+    <div class="max-w-4xl mx-auto py-10">
+        <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">
+            Category Expense Predictions
+        </h1>
+
+        <!-- Search Form -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-10">
+            {% if warning_message %}
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg">
+                <p>{{ warning_message }}</p>
+            </div>
+            {% endif %}
+
+            <form method="get" class="space-y-4">
+                <div>
+                    <label for="category" class="text-lg font-semibold text-gray-700">
+                        Select a Category:
+                    </label>
+                    <select id="category" name="category" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                        <option value="" disabled selected>Select Category</option>
+                        {% for category in categories %}
+                        <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="date" class="text-lg font-semibold text-gray-700">
+                        Select a Date:
+                    </label>
+                    <input 
+                        type="date" 
+                        id="date" 
+                        name="date" 
+                        value="{{ selected_date }}" 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                </div>
+                <button 
+                    type="submit" 
+                    class="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
+                    Predict
+                </button>
+            </form>
+
+            {% if prediction_result %}
+            <div class="mt-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg">
+                <h2 class="font-semibold text-lg">Prediction Result</h2>
+                <p class="text-lg">Category: {{ prediction_result.category }}</p>
+                <p class="text-lg">Date: {{ prediction_result.date }}</p>
+                <p class="text-xl font-bold">Predicted Amount: ₹ {{ prediction_result.predicted_amount }}</p>
+            </div>
+            {% endif %}
+        </div>
+        <a href="/home/" class="back-button">Back to Home</a>
+    </div>
+</body>
+</html> {% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Expense Predictions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-inter text-gray-800">
+    <div class="max-w-4xl mx-auto py-10">
+        <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">
+            Monthly Category Expense Predictions
+        </h1>
+
+        <!-- Search Form -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-10">
+            {% if warning_message %}
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg">
+                <p>{{ warning_message }}</p>
+            </div>
+            {% endif %}
+
+            <form method="get" class="space-y-4">
+                <div>
+                    <label for="category" class="text-lg font-semibold text-gray-700">
+                        Select a Category:
+                    </label>
+                    <select id="category" name="category" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                        <option value="" disabled selected>Select Category</option>
+                        {% for category in categories %}
+                        <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="month" class="text-lg font-semibold text-gray-700">
+                        Select Month:
+                    </label>
+                    <input 
+                        type="month" 
+                        id="month" 
+                        name="month" 
+                        value="{{ selected_month }}" 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                </div>
+                <button 
+                    type="submit" 
+                    class="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
+                    Predict
+                </button>
+            </form>
+
+            {% if prediction_result %}
+            <div class="mt-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg">
+                <h2 class="font-semibold text-lg">Prediction Result</h2>
+                <p class="text-lg">Category: {{ prediction_result.category }}</p>
+                <p class="text-lg">Month: {{ prediction_result.month }}</p>
+                <p class="text-xl font-bold">Predicted Monthly Amount: ₹ {{ prediction_result.predicted_amount }}</p>
+            </div>
+            {% endif %}
+        </div>
+        <a href="/home/" class="back-button">Back to Home</a>
+    </div>
+</body>
+</html>

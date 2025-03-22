@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Expense</title>
+    <style>
+        /* Your existing CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .back-btn {
+            background-color: #ddd;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <button class="back-btn" onclick="window.history.back()">Back to Previous Page</button>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" value="{{ u.email }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required max="{{ today }}" value="{{ edit.date|date:'Y-m-d' }}">
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" name="amount" step="0.01" value="{{ edit.amount }}" required>
+            </div>
+            <div class="form-group">
+                <label for="expense-category">Expense Category</label>
+                <select id="expense-category" name="expensecategory" required>
+                    <option value="food" {% if edit.expensecategory == "food" %}selected{% endif %}>Food</option>
+                    <option value="transportation" {% if edit.expensecategory == "transportation" %}selected{% endif %}>Transportation</option>
+                    <option value="entertainment" {% if edit.expensecategory == "entertainment" %}selected{% endif %}>Entertainment</option>
+                    <option value="utilities" {% if edit.expensecategory == "utilities" %}selected{% endif %}>Utilities</option>
+                    <option value="healthcare" {% if edit.expensecategory == "healthcare" %}selected{% endif %}>Healthcare</option>
+                    <option value="education" {% if edit.expensecategory == "education" %}selected{% endif %}>Education</option>
+                    <option value="housing" {% if edit.expensecategory == "housing" %}selected{% endif %}>Housing</option>
+                    <option value="insurance" {% if edit.expensecategory == "insurance" %}selected{% endif %}>Insurance</option>
+                    <option value="savings" {% if edit.expensecategory == "savings" %}selected{% endif %}>Savings</option>
+                    <option value="miscellaneous" {% if edit.expensecategory == "miscellaneous" %}selected{% endif %}>Miscellaneous</option>
+                    <option value="other" {% if edit.expensecategory == "other" %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+            <input type="hidden" name="income_id" value="{{ income.id }}">
+            <button type="submit">Update Expense</button>
+        </form>
+        
+    </div>
+</body>
+</html>
+
